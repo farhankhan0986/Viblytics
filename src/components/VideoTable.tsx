@@ -115,20 +115,94 @@ export function VideoTable({
 
   const handleExport = () => {
     if (!hasData) return;
-    const headers = ["Title", "Published At", "URL", "Views", "Likes", "Comments", "Engagement %", "Trending"];
+
+    // Calculate percentiles and maximums for the export dataset
+    const sortedViews = [...processedVideos].sort((a, b) => a.views - b.views);
+    const sortedEng = [...processedVideos].sort((a, b) => {
+      const ea = a.views ? (a.likes + a.comments) / a.views : 0;
+      const eb = b.views ? (b.likes + b.comments) / b.views : 0;
+      return ea - eb;
+    });
+
+    const p80Views = sortedViews[Math.floor(sortedViews.length * 0.8)]?.views || 0;
+    const p20Views = sortedViews[Math.floor(sortedViews.length * 0.2)]?.views || 0;
+    
+    // Engagement mapped to decimals
+    const p80Eng = sortedEng[Math.floor(sortedEng.length * 0.8)]?.views 
+      ? (sortedEng[Math.floor(sortedEng.length * 0.8)].likes + sortedEng[Math.floor(sortedEng.length * 0.8)].comments) / sortedEng[Math.floor(sortedEng.length * 0.8)].views : 0;
+    
+    const avgEng = sortedEng.reduce((acc, v) => acc + (v.views ? (v.likes + v.comments) / v.views : 0), 0) / Math.max(1, sortedEng.length);
+    const avgViews = sortedViews.reduce((acc, v) => acc + v.views, 0) / Math.max(1, sortedViews.length);
+
+    const maxViews = sortedViews[sortedViews.length - 1]?.views || 1;
+    const maxEngObj = sortedEng[sortedEng.length - 1];
+    const maxEngVal = maxEngObj?.views ? (maxEngObj.likes + maxEngObj.comments) / maxEngObj.views : 1;
+    const maxEng = maxEngVal > 0 ? maxEngVal : 1;
+    
+    const now = new Date();
+
+    const headers = [
+      "Title", "PublishedDate", "VideoURL", "Views", "Likes", "Comments", 
+      "EngagementRate", "EngagementPercent", "ViewsPerDay", "PerformanceScore", 
+      "IsOutlier", "Trending", "Insight"
+    ];
+
     const rows = processedVideos.map(v => {
-      const eng = v.views > 0 ? (((v.likes + v.comments) / v.views) * 100).toFixed(2) + "%" : "0%";
+      // Base metrics & formatting
+      const engRateVal = v.views > 0 ? (v.likes + v.comments) / v.views : 0;
+      const engRate = engRateVal.toFixed(6);
+      const engPercent = (engRateVal * 100).toFixed(2);
+      
+      const pubDate = new Date(v.publishedAt);
+      const daysSincePub = Math.max(1, Math.floor((now.getTime() - pubDate.getTime()) / (1000 * 60 * 60 * 24)));
+      const viewsPerDay = Math.round(v.views / daysSincePub);
+
+      // standard format: YYYY-MM-DD
+      const pubIso = pubDate.toISOString().split('T')[0];
+
+      // Performance Score (50% views weight, 50% engagement weight)
+      const viewScore = (v.views / maxViews) * 50;
+      const engScore = (engRateVal / maxEng) * 50;
+      const perfScore = (viewScore + engScore).toFixed(1);
+
+      // Outlier boolean
+      const isOutlier = (v.views > p80Views || engRateVal > p80Eng);
+
+      // Rule-based automated insights
+      let insight = "Consistent performer with average metrics.";
+      if (v.views > p80Views && engRateVal > p80Eng) {
+        insight = "Viral hit with exceptional community engagement.";
+      } else if (v.views > p80Views && engRateVal < avgEng) {
+        insight = "High reach but below-average viewer interaction.";
+      } else if (engRateVal > p80Eng && v.views < avgViews) {
+        insight = "Loyal niche audience driving strong engagement despite lower views.";
+      } else if (v.views < p20Views && engRateVal < avgEng) {
+        insight = "Underperforming relative to channel benchmarks in both reach and engagement.";
+      } else if (v.views > avgViews && v.isTrending) {
+        insight = "Strong momentum and trending positively above 80th percentile.";
+      }
+
       return [
         `"${v.title.replace(/"/g, '""')}"`,
-        new Date(v.publishedAt).toLocaleDateString(),
-        v.url, v.views, v.likes, v.comments, eng,
-        v.isTrending ? "Yes" : "No",
+        pubIso,
+        v.url,
+        v.views,
+        v.likes,
+        v.comments,
+        engRate,
+        engPercent,
+        viewsPerDay,
+        perfScore,
+        isOutlier.toString(),
+        String(!!v.isTrending),
+        `"${insight}"`
       ].join(",");
     });
+
     const csv  = [headers.join(","), ...rows].join("\n");
     const link = document.createElement("a");
     link.href  = URL.createObjectURL(new Blob([csv], { type: "text/csv;charset=utf-8;" }));
-    link.setAttribute("download", `${channelTitle}_${sortField}_${dateRange || "all"}d.csv`);
+    link.setAttribute("download", `${channelTitle}_analytics_${dateRange || "all"}d.csv`);
     document.body.appendChild(link);
     link.click();
     document.body.removeChild(link);
