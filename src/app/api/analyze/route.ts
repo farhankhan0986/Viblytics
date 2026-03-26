@@ -7,19 +7,21 @@ function generateMockData(channelName: string): AnalyzeResponse {
 
   // Spread 20 videos across 90 days so 30/90/all-time filters all work
   const videos = Array.from({ length: 20 }).map((_, i) => {
-    const daysAgo = Math.floor((i / 20) * 90); // uniform spread 0..90d
-    const isTrending = Math.random() > 0.8;
-    const views = Math.floor(baseViews * (isTrending ? (Math.random() * 3 + 2) : (Math.random() * 0.8 + 0.5)));
+    const daysAgo = Math.floor((i / 20) * 90);
+    const views    = Math.floor(baseViews * (Math.random() * 2.5 + 0.5));
+    const likes    = Math.floor(views * (Math.random() * 0.05 + 0.01));
+    const comments = Math.floor(views * (Math.random() * 0.005 + 0.001));
     return {
       id: `mock_vid_${i}`,
       title: `${channelName} — Video ${i + 1}: ${['Deep Dive', 'Review', 'Hands-On', 'First Look', 'Unboxing', 'Explained'][i % 6]} ${['2026', 'S2', 'Edition', ''][i % 4]}`.trim(),
       thumbnail: `https://picsum.photos/seed/${channelName}${i}/320/180`,
       publishedAt: new Date(Date.now() - daysAgo * 24 * 60 * 60 * 1000).toISOString(),
       views,
-      likes: Math.floor(views * (Math.random() * 0.05 + 0.01)),
-      comments: Math.floor(views * (Math.random() * 0.005 + 0.001)),
+      likes,
+      comments,
       url: `https://youtube.com/watch?v=mock_vid_${i}`,
-      isTrending: false, // will be recalculated below
+      isTrending: false,
+      engagementRate: views > 0 ? parseFloat(((likes + comments) / views * 100).toFixed(2)) : 0,
     };
   });
 
@@ -160,17 +162,20 @@ export async function GET(request: Request) {
 
     let totalViews = 0;
     const videos: VideoStats[] = videoStatsData.items.map((v: any) => {
-      const views = parseInt(v.statistics.viewCount || '0');
+      const views   = parseInt(v.statistics.viewCount   || '0');
+      const likes   = parseInt(v.statistics.likeCount   || '0');
+      const comments = parseInt(v.statistics.commentCount || '0');
       totalViews += views;
       return {
         id: v.id,
         title: v.snippet.title,
         thumbnail: v.snippet.thumbnails.maxres?.url || v.snippet.thumbnails.high?.url || v.snippet.thumbnails.default?.url,
         publishedAt: v.snippet.publishedAt,
-        views: views,
-        likes: parseInt(v.statistics.likeCount || '0'),
-        comments: parseInt(v.statistics.commentCount || '0'),
-        url: `https://youtube.com/watch?v=${v.id}`
+        views,
+        likes,
+        comments,
+        url: `https://youtube.com/watch?v=${v.id}`,
+        engagementRate: views > 0 ? parseFloat(((likes + comments) / views * 100).toFixed(2)) : 0,
       };
     });
 

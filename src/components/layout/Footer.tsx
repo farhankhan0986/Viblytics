@@ -8,11 +8,11 @@ export function Footer() {
           <div className="flex h-5 w-5 items-center justify-center rounded-md bg-linear-to-br from-indigo-600 to-violet-600">
             <BarChart3 className="h-3 w-3 text-white" strokeWidth={2.5} />
           </div>
-          <span className="font-medium text-slate-600 dark:text-slate-300">VidMetrics</span>
+          <span className="font-medium text-slate-600 dark:text-slate-300">Viblytics</span>
           <span>·</span>
-          <span>Competitor intelligence for modern marketing teams</span>
+          <span>YouTube competitor intelligence for modern teams</span>
         </div>
-        <span className="text-xs text-slate-400 dark:text-slate-500">Data via YouTube API v3</span>
+        <span className="text-xs text-slate-400 dark:text-slate-500">Powered by YouTube Data API v3</span>
       </div>
     </footer>
   );

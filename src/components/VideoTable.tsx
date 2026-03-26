@@ -9,7 +9,7 @@ import {
 } from "lucide-react";
 
 // ── Types ────────────────────────────────────────────────────────────────────
-type SortField = "views" | "likes" | "comments" | "publishedAt";
+type SortField = "views" | "likes" | "comments" | "publishedAt" | "engagementRate";
 type DateRange = 7 | 14 | 30 | 90 | 0; // 0 = All time
 
 const DATE_RANGE_OPTIONS: { label: string; value: DateRange }[] = [
@@ -21,17 +21,19 @@ const DATE_RANGE_OPTIONS: { label: string; value: DateRange }[] = [
 ];
 
 const SORT_OPTIONS: { label: string; field: SortField }[] = [
-  { label: "Views",    field: "views"       },
-  { label: "Likes",    field: "likes"       },
-  { label: "Comments", field: "comments"    },
-  { label: "Date",     field: "publishedAt" },
+  { label: "Views",      field: "views"          },
+  { label: "Likes",      field: "likes"          },
+  { label: "Comments",   field: "comments"       },
+  { label: "Eng. Rate",  field: "engagementRate" },
+  { label: "Date",       field: "publishedAt"    },
 ];
 
 // ── Metric descriptions for tooltips ─────────────────────────────────────────
 const METRIC_INFO: Record<string, string> = {
-  views:    "Total view count accumulated on YouTube since the video was published.",
-  likes:    "Total likes the video has received (some channels hide exact counts).",
-  comments: "Total public comments on the video at time of last fetch.",
+  views:          "Total view count accumulated on YouTube since the video was published.",
+  likes:          "Total likes the video has received (some channels hide exact counts).",
+  comments:       "Total public comments on the video at time of last fetch.",
+  engagementRate: "(likes + comments) / views × 100. Measures audience interaction relative to reach.",
 };
 
 // ── Tooltip sub-component (CSS-only, no library) ──────────────────────────────
@@ -236,7 +238,7 @@ export function VideoTable({
               value={minViews}
               onChange={e => setMinViews(e.target.value)}
               placeholder="Min views"
-              className="w-28 rounded-xl border border-slate-200 bg-white py-1.5 pl-6 pr-3 text-xs text-slate-700 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-indigo-400 focus:border-transparent transition"
+              className="w-28 rounded-xl border border-slate-600 bg-slate-100 dark:bg-slate-800 py-1.5 pl-6 pr-3 text-xs dark:text-slate-200 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-indigo-400 focus:border-transparent transition"
               aria-label="Minimum view count filter"
             />
           </div>
@@ -254,14 +256,14 @@ export function VideoTable({
       </div>
 
       {/* ── Table ────────────────────────────────────────────────────────── */}
-      <div className="overflow-x-auto overflow-y-visible">
+      <div className="overflow-x-auto lg:overflow-x-hidden overflow-y-visible">
         <table className="min-w-full divide-y divide-slate-100 dark:divide-slate-800">
           <thead className="bg-slate-50/70 dark:bg-slate-800/50 overflow-visible">
             <tr>
               <th scope="col" className="py-3 pl-5 pr-3 text-left text-xs font-semibold uppercase tracking-wide text-slate-500 dark:text-slate-400">
                 Video
               </th>
-              {(["views", "likes", "comments"] as SortField[]).map(field => (
+              {(["views", "likes", "comments", "engagementRate"] as SortField[]).map(field => (
                 <th
                   key={field}
                   scope="col"
@@ -271,7 +273,7 @@ export function VideoTable({
                   `}
                 >
                   <div className="flex items-center gap-1 w-max">
-                    {field.charAt(0).toUpperCase() + field.slice(1)}
+                    {field === "engagementRate" ? "Eng. Rate" : field.charAt(0).toUpperCase() + field.slice(1)}
                     <SortIcon field={field} />
                     {METRIC_INFO[field] && <HelpTooltip text={METRIC_INFO[field]} />}
                   </div>
@@ -331,13 +333,29 @@ export function VideoTable({
                 <td className="whitespace-nowrap px-3 py-3.5 text-sm text-slate-500 dark:text-slate-400 tabular-nums">
                   {fmtNum(video.comments)}
                 </td>
+                {/* Engagement Rate badge */}
+                <td className="whitespace-nowrap px-3 py-3.5">
+                  {(() => {
+                    const er = video.engagementRate ?? (video.views > 0 ? +((video.likes + video.comments) / video.views * 100).toFixed(2) : 0);
+                    const cls = er >= 5
+                      ? "bg-emerald-50 dark:bg-emerald-950/50 text-emerald-700 dark:text-emerald-400 ring-emerald-200 dark:ring-emerald-800"
+                      : er >= 2
+                        ? "bg-amber-50 dark:bg-amber-950/50 text-amber-700 dark:text-amber-400 ring-amber-200 dark:ring-amber-800"
+                        : "bg-rose-50 dark:bg-rose-950/50 text-rose-700 dark:text-rose-400 ring-rose-200 dark:ring-rose-800";
+                    return (
+                      <span className={`inline-flex items-center rounded-full px-2 py-0.5 text-xs font-semibold ring-1 ring-inset tabular-nums ${cls}`}>
+                        {er.toFixed(2)}%
+                      </span>
+                    );
+                  })()}
+                </td>
               </tr>
             ))}
 
             {/* Empty state */}
             {!hasData && (
               <tr>
-                <td colSpan={4} className="py-16 text-center">
+                <td colSpan={5} className="py-16 text-center">
                   <div className="flex flex-col items-center gap-2">
                     <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-slate-100 dark:bg-slate-800">
                       <Filter className="h-5 w-5 text-slate-400" />

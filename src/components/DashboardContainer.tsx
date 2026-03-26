@@ -1,27 +1,45 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect, useCallback, Suspense } from "react";
+import { useSearchParams, useRouter } from "next/navigation";
 import { ChannelInput, saveRecentChannel } from "@/components/ChannelInput";
 import { Dashboard } from "@/components/Dashboard";
 import { LoadingSkeleton } from "@/components/LoadingSkeleton";
 import { AnalyzeResponse } from "@/types";
-import { AlertCircle, BarChart2, Search, TrendingUp } from "lucide-react";
+import { AlertCircle, BarChart2, Search, TrendingUp, Zap } from "lucide-react";
 
 const FEATURE_PILLS = [
-  { icon: Search, label: "Any public channel" },
-  { icon: TrendingUp, label: "Last 30 days" },
-  { icon: BarChart2, label: "Live metrics" },
+  { icon: Search,     label: "Any public channel" },
+  { icon: TrendingUp, label: "Last 90 days" },
+  { icon: BarChart2,  label: "Live metrics" },
+  { icon: Zap,        label: "AI-style insights" },
 ];
 
-export function DashboardContainer() {
-  const [data, setData] = useState<AnalyzeResponse | null>(null);
-  const [isLoading, setIsLoading] = useState(false);
-  const [error, setError] = useState<string | null>(null);
+const EXAMPLE_CHANNELS = [
+  { label: "@mkbhd",      url: "https://youtube.com/@mkbhd" },
+  { label: "@MrBeast",    url: "https://youtube.com/@MrBeast" },
+  { label: "@veritasium", url: "https://youtube.com/@veritasium" },
+  { label: "@fireship",   url: "https://youtube.com/@fireship" },
+  { label: "@LinusTech",  url: "https://youtube.com/@LinusTechTips" },
+];
 
-  const handleAnalyze = async (url: string) => {
+// ── Inner component that reads search params ───────────────────────────────
+function DashboardContainerInner() {
+  const searchParams = useSearchParams();
+  const router       = useRouter();
+
+  const [data, setData]         = useState<AnalyzeResponse | null>(null);
+  const [isLoading, setIsLoading] = useState(false);
+  const [error, setError]       = useState<string | null>(null);
+
+  const handleAnalyze = useCallback(async (url: string) => {
     setIsLoading(true);
     setError(null);
     setData(null);
+
+    // Push ?channel= to URL for shareability
+    router.push(`?channel=${encodeURIComponent(url)}`, { scroll: false });
+
     try {
       const res = await fetch(`/api/analyze?url=${encodeURIComponent(url)}`);
       if (!res.ok) {
@@ -36,18 +54,33 @@ export function DashboardContainer() {
     } finally {
       setIsLoading(false);
     }
-  };
+  }, [router]);
+
+  // Auto-analyze if ?channel= is in URL on load
+  useEffect(() => {
+    const ch = searchParams.get("channel");
+    if (ch && !data && !isLoading) {
+      handleAnalyze(ch);
+    }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []); // run once on mount
 
   const showHero = !data && !isLoading;
 
   return (
     <div className="flex w-full flex-col items-center">
       {/* Hero */}
-      <section className={`w-full relative overflow-hidden bg-white dark:bg-slate-900 transition-all duration-500 ease-in-out ${showHero ? "py-24 md:py-32" : "py-10 border-b border-slate-200 dark:border-slate-800"}`}>
+      <section className={`w-full relative overflow-hidden transition-all duration-500 ease-in-out ${showHero ? "py-24 md:py-32 bg-white dark:bg-slate-900" : "py-10 bg-white dark:bg-slate-900 border-b border-slate-200 dark:border-slate-800"}`}>
         {showHero && (
-          <div className="pointer-events-none absolute inset-0 opacity-[0.03] dark:opacity-[0.05]"
-            style={{ backgroundImage: "linear-gradient(#6366f1 1px,transparent 1px),linear-gradient(90deg,#6366f1 1px,transparent 1px)", backgroundSize: "40px 40px" }}
-          />
+          <>
+            {/* Radial glow */}
+            <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_80%_60%_at_50%_-10%,rgba(99,102,241,0.12),transparent)] dark:bg-[radial-gradient(ellipse_80%_60%_at_50%_-10%,rgba(99,102,241,0.18),transparent)]" />
+            {/* Dot grid */}
+            <div
+              className="pointer-events-none absolute inset-0 opacity-[0.035] dark:opacity-[0.06]"
+              style={{ backgroundImage: "radial-gradient(circle, #6366f1 1px, transparent 1px)", backgroundSize: "32px 32px" }}
+            />
+          </>
         )}
 
         <div className="relative mx-auto max-w-3xl px-4 text-center">
@@ -65,7 +98,7 @@ export function DashboardContainer() {
                 <span className="text-indigo-600 dark:text-indigo-400">Video Performance</span>
               </h1>
               <p className="mx-auto mt-5 max-w-xl text-lg text-slate-500 dark:text-slate-400 leading-relaxed">
-                Paste any YouTube channel URL to instantly surface their best-performing videos from the past 30 days.
+                Paste any YouTube channel URL to surface top-performing videos, engagement insights, and content trends.
               </p>
             </>
           )}
@@ -73,6 +106,23 @@ export function DashboardContainer() {
           <div className={showHero ? "mt-10" : ""}>
             <ChannelInput onAnalyze={handleAnalyze} isLoading={isLoading} />
           </div>
+
+          {/* Example channel quick-fill buttons */}
+          {showHero && (
+            <div className="mt-5 flex flex-wrap items-center justify-center gap-2">
+              <span className="text-xs text-slate-400 dark:text-slate-500 mr-1">Try:</span>
+              {EXAMPLE_CHANNELS.map(({ label, url }) => (
+                <button
+                  key={label}
+                  onClick={() => handleAnalyze(url)}
+                  disabled={isLoading}
+                  className="inline-flex items-center gap-1.5 rounded-full bg-slate-100 dark:bg-slate-800 px-3 py-1.5 text-xs font-medium text-slate-600 dark:text-slate-300 hover:bg-indigo-50 dark:hover:bg-indigo-950/50 hover:text-indigo-700 dark:hover:text-indigo-300 ring-1 ring-slate-200 dark:ring-slate-700 hover:ring-indigo-200 dark:hover:ring-indigo-800 transition-all duration-150 disabled:opacity-40 disabled:cursor-not-allowed"
+                >
+                  {label}
+                </button>
+              ))}
+            </div>
+          )}
 
           {error && (
             <div className="mt-4 flex items-start gap-3 rounded-xl bg-rose-50 dark:bg-rose-950/40 px-4 py-3.5 text-left ring-1 ring-rose-200 dark:ring-rose-900">
@@ -96,11 +146,25 @@ export function DashboardContainer() {
             </div>
             <h2 className="text-lg font-semibold text-slate-700 dark:text-slate-300">No channel analyzed yet</h2>
             <p className="mt-2 max-w-sm text-sm text-slate-400 dark:text-slate-500 leading-relaxed">
-              Paste a YouTube channel URL above to see video performance, trending content, and key metrics.
+              Paste a URL above or click one of the quick-start channels to see live video performance data.
             </p>
           </div>
         ) : null}
       </section>
     </div>
+  );
+}
+
+// ── Wrapped in Suspense for useSearchParams ────────────────────────────────
+export function DashboardContainer() {
+  const fallback = (
+    <div className="flex w-full flex-col items-center">
+      <div className="w-full py-24 text-center text-slate-400">Loading…</div>
+    </div>
+  );
+  return (
+    <Suspense fallback={fallback}>
+      <DashboardContainerInner />
+    </Suspense>
   );
 }

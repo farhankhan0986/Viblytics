@@ -18,9 +18,17 @@ export interface VideoStats {
   comments: number;
   url: string;
   isTrending?: boolean;
+  engagementRate?: number; // (likes + comments) / views * 100
 }
 
 export interface AnalyzeResponse {
   channel: ChannelStats;
   videos: VideoStats[];
+}
+
+export interface AIInsights {
+  summary: string;
+  insights: string[];
+  patterns: string[];
+  recommendations: string[];
 }

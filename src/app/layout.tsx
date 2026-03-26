@@ -8,8 +8,14 @@ import { ThemeProvider } from "@/components/ThemeProvider";
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
-  title: "VidMetrics | Competitor Analyzer",
-  description: "Analyze competitor YouTube video performance instantly.",
+  title: "Viblytics | YouTube Competitor Analyzer",
+  description: "Instantly analyze any YouTube channel's video performance. Surface top content, engagement trends, and growth insights.",
+  keywords: ["YouTube analytics", "competitor analysis", "video performance", "SaaS"],
+  openGraph: {
+    title: "Viblytics — YouTube Competitor Analyzer",
+    description: "Surface top-performing competitor videos in seconds.",
+    type: "website",
+  },
 };
 
 export default function RootLayout({
