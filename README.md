@@ -18,7 +18,7 @@ Built for marketing and analytics teams who move fast and make data-driven decis
 
 > **Live walkthrough:** [🎥 Add your Loom link here](https://loom.com)
 >
-> **Shareable channel link:** `https://your-deployment.vercel.app/?channel=https://youtube.com/@mkbhd`
+> **Shareable channel link:** `https://viblytics.vercel.app/?channel=https%3A%2F%2Fyoutube.com%2F%40MrBeast`
 
 ---
 
