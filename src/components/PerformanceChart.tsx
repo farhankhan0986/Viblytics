@@ -79,7 +79,7 @@ export function PerformanceChart({ videos }: { videos: VideoStats[] }) {
     isTrending: v.isTrending,
   }));
 
-  const trending    = scatterData.filter(d => d.isTrending);
+  const trending = scatterData.filter(d => d.isTrending);
   const nonTrending = scatterData.filter(d => !d.isTrending);
 
   const maxViews = Math.max(...top5.map(d => d.views));
@@ -95,7 +95,7 @@ export function PerformanceChart({ videos }: { videos: VideoStats[] }) {
             {activeTab === "bar" ? "Top 5 Videos by Views" : "Views vs Engagement Rate"}
           </h3>
           <p className="text-xs text-slate-400 mt-0.5">
-            {activeTab === "bar" ? "Last 30 days · Sorted by total view count" : "Each dot = one video · 🔥 Trending highlighted"}
+            {activeTab === "bar" ? "Last 30 days · Sorted by total view count" : "Each dot = one video · Trending highlighted"}
           </p>
         </div>
         <div className="flex items-center gap-2">
@@ -108,8 +108,8 @@ export function PerformanceChart({ videos }: { videos: VideoStats[] }) {
           {/* Tab toggle */}
           <div className="flex items-center gap-1 rounded-xl bg-slate-100 dark:bg-slate-800 p-1">
             {([
-              { key: "bar",     icon: BarChart2,  label: "Top 5" },
-              { key: "scatter", icon: Crosshair,  label: "Scatter" },
+              { key: "bar", icon: BarChart2, label: "Top 5" },
+              { key: "scatter", icon: Crosshair, label: "Scatter" },
             ] as const).map(({ key, icon: Icon, label }) => (
               <button
                 key={key}
@@ -149,7 +149,7 @@ export function PerformanceChart({ videos }: { videos: VideoStats[] }) {
                 type="number" dataKey="views" name="Views"
                 tickFormatter={fmt} tick={{ fontSize: 11, fill: tickColor }}
                 axisLine={false} tickLine={false}
-                label={{ value: "Views", position: "insideBottom", offset: -16, fill: tickColor, fontSize: 11 }}
+                label={{ value: "Views", position: "insideBottom", offset: -10, fill: tickColor, fontSize: 11 }}
               />
               <YAxis
                 type="number" dataKey="er" name="Eng. Rate"
@@ -161,7 +161,7 @@ export function PerformanceChart({ videos }: { videos: VideoStats[] }) {
               <Tooltip content={<ScatterTooltip />} cursor={{ strokeDasharray: "3 3" }} />
               <Legend wrapperStyle={{ fontSize: 11, paddingTop: 8 }} />
               <Scatter name="Regular" data={nonTrending} fill="#818cf8" fillOpacity={0.75} />
-              <Scatter name="🔥 Trending" data={trending} fill="#ef4444" fillOpacity={0.85} />
+              <Scatter name="Trending" data={trending} fill="#ef4444" fillOpacity={0.85} />
             </ScatterChart>
           )}
         </ResponsiveContainer>

@@ -2,6 +2,7 @@
 
 import { BarChart3, Moon, Sun, Activity } from "lucide-react";
 import { useTheme } from "@/components/ThemeProvider";
+import Image from "next/image";
 
 export function Header() {
   const { theme, toggle } = useTheme();
@@ -13,12 +14,17 @@ export function Header() {
         {/* ── Logo ──────────────────────────────────────────────────────── */}
         <div className="flex items-center gap-3">
           {/* Icon mark with glow */}
-          <div className="relative">
-            <div className="absolute inset-0 rounded-xl bg-indigo-500 opacity-20 blur-md" />
-            <div className="relative flex h-9 w-9 items-center justify-center rounded-xl bg-linear-to-br from-indigo-500 to-violet-600 shadow-md shadow-indigo-300/40 dark:shadow-indigo-900/50">
-              <BarChart3 className="h-[18px] w-[18px] text-white" strokeWidth={2.5} />
-            </div>
-          </div>
+          <div className="relative flex items-center justify-center">
+  <div className="absolute inset-0 rounded-xl bg-indigo-500/20 dark:bg-indigo-400/20 blur-md" />
+
+  <Image
+    src="/icon.svg"
+    alt="Viblytics Logo"
+    width={44}
+    height={44}
+    className="relative z-10"
+  />
+</div>
 
           {/* Wordmark */}
           <div className="flex flex-col leading-none gap-2">

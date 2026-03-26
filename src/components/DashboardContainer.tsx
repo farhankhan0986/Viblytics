@@ -7,30 +7,31 @@ import { Dashboard } from "@/components/Dashboard";
 import { LoadingSkeleton } from "@/components/LoadingSkeleton";
 import { AnalyzeResponse } from "@/types";
 import { AlertCircle, BarChart2, Search, TrendingUp, Zap } from "lucide-react";
+import Image from "next/image";
 
 const FEATURE_PILLS = [
-  { icon: Search,     label: "Any public channel" },
+  { icon: Search, label: "Any public channel" },
   { icon: TrendingUp, label: "Last 90 days" },
-  { icon: BarChart2,  label: "Live metrics" },
-  { icon: Zap,        label: "AI-style insights" },
+  { icon: BarChart2, label: "Live metrics" },
+  { icon: Zap, label: "AI-style insights" },
 ];
 
 const EXAMPLE_CHANNELS = [
-  { label: "@mkbhd",      url: "https://youtube.com/@mkbhd" },
-  { label: "@MrBeast",    url: "https://youtube.com/@MrBeast" },
+  { label: "@mkbhd", url: "https://youtube.com/@mkbhd" },
+  { label: "@MrBeast", url: "https://youtube.com/@MrBeast" },
   { label: "@veritasium", url: "https://youtube.com/@veritasium" },
-  { label: "@fireship",   url: "https://youtube.com/@fireship" },
-  { label: "@LinusTech",  url: "https://youtube.com/@LinusTechTips" },
+  { label: "@fireship", url: "https://youtube.com/@fireship" },
+  { label: "@LinusTech", url: "https://youtube.com/@LinusTechTips" },
 ];
 
 // ── Inner component that reads search params ───────────────────────────────
 function DashboardContainerInner() {
   const searchParams = useSearchParams();
-  const router       = useRouter();
+  const router = useRouter();
 
-  const [data, setData]         = useState<AnalyzeResponse | null>(null);
+  const [data, setData] = useState<AnalyzeResponse | null>(null);
   const [isLoading, setIsLoading] = useState(false);
-  const [error, setError]       = useState<string | null>(null);
+  const [error, setError] = useState<string | null>(null);
 
   const handleAnalyze = useCallback(async (url: string) => {
     setIsLoading(true);
@@ -62,7 +63,7 @@ function DashboardContainerInner() {
     if (ch && !data && !isLoading) {
       handleAnalyze(ch);
     }
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []); // run once on mount
 
   const showHero = !data && !isLoading;
@@ -73,6 +74,19 @@ function DashboardContainerInner() {
       <section className={`w-full relative overflow-hidden transition-all duration-500 ease-in-out ${showHero ? "py-24 md:py-32 bg-white dark:bg-slate-900" : "py-10 bg-white dark:bg-slate-900 border-b border-slate-200 dark:border-slate-800"}`}>
         {showHero && (
           <>
+            <div className="absolute top-6 left-1/2 -translate-x-1/2 z-10">
+              <div className="relative flex items-center justify-center">
+                {/* <div className="absolute inset-0 rounded-xl bg-indigo-500/20 dark:bg-indigo-400/20 blur-md" /> */}
+
+                <Image
+                  src="/icon.svg"
+                  alt="Viblytics Logo"
+                  width={90}
+                  height={90}
+                  className="relative z-10"
+                />
+              </div>
+            </div>
             {/* Radial glow */}
             <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_80%_60%_at_50%_-10%,rgba(99,102,241,0.12),transparent)] dark:bg-[radial-gradient(ellipse_80%_60%_at_50%_-10%,rgba(99,102,241,0.18),transparent)]" />
             {/* Dot grid */}
@@ -83,10 +97,13 @@ function DashboardContainerInner() {
           </>
         )}
 
+
         <div className="relative mx-auto max-w-3xl px-4 text-center">
+
           {showHero && (
             <>
               <div className="mb-8 flex flex-wrap justify-center gap-2">
+
                 {FEATURE_PILLS.map(({ icon: Icon, label }) => (
                   <span key={label} className="inline-flex items-center gap-1.5 rounded-full bg-indigo-50 dark:bg-indigo-950/60 px-3 py-1 text-xs font-medium text-indigo-700 dark:text-indigo-300 ring-1 ring-indigo-100 dark:ring-indigo-900">
                     <Icon className="h-3.5 w-3.5" />{label}
