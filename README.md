@@ -215,3 +215,13 @@ src/
 ## 📄 License
 
 MIT — free to use, fork, and extend.
+
+---
+
+## 👤 Author
+
+Name: Farhan Abid
+
+
+Email: farhankhan080304@gmail.com 
+
