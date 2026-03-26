@@ -7,7 +7,7 @@ import {
   ScatterChart, Scatter, ZAxis, Legend,
 } from "recharts";
 import { useTheme } from "@/components/ThemeProvider";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { BarChart2, Crosshair } from "lucide-react";
 
 const BAR_COLORS = ["#4f46e5", "#6366f1", "#818cf8", "#a5b4fc", "#c7d2fe"];
@@ -57,6 +57,14 @@ export function PerformanceChart({ videos }: { videos: VideoStats[] }) {
   const { theme } = useTheme();
   const isDark = theme === "dark";
   const [activeTab, setActiveTab] = useState<"bar" | "scatter">("bar");
+  const [isMobile, setIsMobile] = useState(false);
+
+  useEffect(() => {
+    const check = () => setIsMobile(window.innerWidth < 640);
+    check();
+    window.addEventListener("resize", check);
+    return () => window.removeEventListener("resize", check);
+  }, []);
 
   if (videos.length === 0) return null;
 
@@ -65,7 +73,7 @@ export function PerformanceChart({ videos }: { videos: VideoStats[] }) {
     .slice(0, 5)
     .map((v, i) => ({
       rank: i + 1,
-      name: v.title.length > 32 ? v.title.substring(0, 32) + "…" : v.title,
+      name: v.title.length > (isMobile ? 12 : 32) ? v.title.substring(0, isMobile ? 12 : 32) + "…" : v.title,
       fullTitle: v.title,
       views: v.views,
       colorIndex: i,
@@ -129,13 +137,13 @@ export function PerformanceChart({ videos }: { videos: VideoStats[] }) {
       </div>
 
       {/* Charts */}
-      <div className="px-2 pt-4 pb-6 h-[280px]">
-        <ResponsiveContainer width="100%" height="100%" minWidth={0} minHeight={0}>
+      <div className="w-full px-2 pt-4 pb-6 min-w-0">
+        <ResponsiveContainer width="99%" height={280}>
           {activeTab === "bar" ? (
-            <BarChart layout="vertical" data={top5} margin={{ top: 0, right: 64, left: 160, bottom: 0 }} barCategoryGap="28%">
+            <BarChart layout="vertical" data={top5} margin={{ top: 0, right: isMobile ? 48 : 64, left: isMobile ? 80 : 160, bottom: 0 }} barCategoryGap="28%">
               <CartesianGrid horizontal={false} strokeDasharray="3 3" stroke={gridColor} />
               <XAxis type="number" tickFormatter={fmt} tick={{ fontSize: 11, fill: tickColor }} axisLine={false} tickLine={false} tickCount={5} />
-              <YAxis type="category" dataKey="name" tick={<CustomYTick isDark={isDark} />} axisLine={false} tickLine={false} width={152} />
+              <YAxis type="category" dataKey="name" tick={<CustomYTick isDark={isDark} />} axisLine={false} tickLine={false} width={isMobile ? 72 : 152} />
               <Tooltip content={<BarTooltip />} cursor={{ fill: isDark ? "#1e293b" : "#f8fafc", radius: 6 }} />
               <Bar dataKey="views" radius={[0, 6, 6, 0]} maxBarSize={36}>
                 {top5.map((entry) => <Cell key={entry.rank} fill={BAR_COLORS[entry.colorIndex]} />)}

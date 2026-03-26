@@ -127,15 +127,21 @@ function generateFallback(data: AnalyzeResponse): AIInsights {
 
 export async function POST(request: Request) {
   const apiKey = process.env.GROQ_API_KEY;
+  let requestData: AnalyzeResponse | null = null;
 
   try {
-    const data: AnalyzeResponse = await request.json();
+    requestData = await request.json();
 
-    if (!apiKey) {
-      return NextResponse.json(generateFallback(data));
+    // TypeScript: verify requestData exists before passing to helpers
+    if (!requestData) {
+      return NextResponse.json({ error: 'No data provided' }, { status: 400 });
     }
 
-    const prompt = buildPrompt(data);
+    if (!apiKey) {
+      return NextResponse.json(generateFallback(requestData));
+    }
+
+    const prompt = buildPrompt(requestData);
 
     const groqRes = await fetch(GROQ_API_URL, {
       method: 'POST',
@@ -154,14 +160,16 @@ export async function POST(request: Request) {
     if (!groqRes.ok) {
       const err = await groqRes.text();
       console.error('Groq error:', err);
-      return NextResponse.json(generateFallback(data));
+      // fallback safe to call here because we checked !requestData above
+      return NextResponse.json(generateFallback(requestData!));
     }
 
     const groqData = await groqRes.json();
     const raw      = groqData.choices?.[0]?.message?.content ?? '';
 
-    // Parse JSON, strip potential markdown fences
-    const cleaned = raw.replace(/^```json\s*/i, '').replace(/```\s*$/, '').trim();
+    // Extract JSON block using regex in case model adds markdown or preamble
+    const match = raw.match(/\{[\s\S]*\}/);
+    const cleaned = match ? match[0] : raw;
     const parsed: AIInsights = JSON.parse(cleaned);
 
     // Validate shape
@@ -173,11 +181,10 @@ export async function POST(request: Request) {
 
   } catch (err) {
     console.error('AI insights error:', err);
-    try {
-      // Try to return fallback with whatever data we have
-      const data: AnalyzeResponse = await request.clone().json().catch(() => null);
-      if (data) return NextResponse.json(generateFallback(data));
-    } catch {}
+    if (requestData) {
+      console.log('Falling back to rules-based insights due to AI error');
+      return NextResponse.json(generateFallback(requestData));
+    }
     return NextResponse.json({ error: 'AI insights unavailable' }, { status: 500 });
   }
 }

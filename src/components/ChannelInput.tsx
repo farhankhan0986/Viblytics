@@ -72,7 +72,7 @@ export function ChannelInput({ onAnalyze, isLoading }: Props) {
             type="text"
             autoComplete="off"
             spellCheck={false}
-            className="block w-full rounded-2xl border-0 bg-transparent py-4 pl-11 pr-4 text-sm text-slate-900 dark:text-slate-100 placeholder:text-slate-400 dark:placeholder:text-slate-500 focus:ring-0 outline-none"
+            className="block w-full rounded-2xl border-0 bg-transparent py-4 pl-11 pr-4 text-base sm:text-sm text-slate-900 dark:text-slate-100 placeholder:text-slate-400 dark:placeholder:text-slate-500 focus:ring-0 outline-none"
             placeholder="youtube.com/@mkbhd or channel URL…"
             value={url}
             onChange={(e) => setUrl(e.target.value)}

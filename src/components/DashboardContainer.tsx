@@ -83,7 +83,7 @@ function DashboardContainerInner() {
                   alt="Viblytics Logo"
                   width={90}
                   height={90}
-                  className="relative z-10"
+                  className="relative z-10 w-16 h-16 sm:w-[90px] sm:h-[90px]"
                 />
               </div>
             </div>
@@ -111,7 +111,7 @@ function DashboardContainerInner() {
                 ))}
               </div>
               <h1 className="text-4xl font-extrabold tracking-tight text-slate-900 dark:text-white sm:text-5xl md:text-[56px] leading-[1.1]">
-                Analyze Competitor<br />
+                Analyze Competitor{" "}
                 <span className="text-indigo-600 dark:text-indigo-400">Video Performance</span>
               </h1>
               <p className="mx-auto mt-5 max-w-xl text-lg text-slate-500 dark:text-slate-400 leading-relaxed">
