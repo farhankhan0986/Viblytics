@@ -22,6 +22,16 @@ Built for marketing and analytics teams who move fast and make data-driven decis
 
 ---
 
+## ✨ Features
+
+- AI-powered insights (Groq + LLaMA 3.3 70B)
+- Engagement rate analysis
+- Views vs Engagement scatter chart
+- Shareable analysis URLs
+- Example channels for quick demo
+
+---
+
 ## What It Does
 
 Paste any YouTube channel URL (or click a quick-start button). In seconds you get:
