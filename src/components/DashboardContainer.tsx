@@ -174,17 +174,23 @@ function DashboardContainerInner() {
 
 // ── Wrapped in Suspense for useSearchParams ────────────────────────────────
 export function DashboardContainer() {
-  const fallback = null;
-  /* const fallback = (
-    <div className="flex w-full flex-col items-center justify-center py-24">
-      <div className="flex flex-col items-center gap-4">
-        <div className="relative flex h-14 w-14 items-center justify-center rounded-2xl bg-indigo-50 dark:bg-indigo-900/30 ring-1 ring-indigo-100/50 dark:ring-indigo-800/50 shadow-sm">
-          {/* <Loader2 className="h-6 w-6 text-indigo-600 dark:text-indigo-400 animate-spin" /> *\/}
+  const fallback = (
+    <div className="flex w-full flex-col items-center justify-center py-32">
+      <div className="flex flex-col items-center gap-6">
+        <div className="relative">
+          <div className="absolute inset-0 rounded-full bg-indigo-500/20 dark:bg-indigo-400/20 blur-xl animate-pulse" />
+          <div className="relative flex h-16 w-16 items-center justify-center rounded-2xl bg-white dark:bg-slate-900 ring-1 ring-slate-200/50 dark:ring-slate-800/50 shadow-xl overflow-hidden p-[2px]">
+             <div className="absolute inset-[-150%] animate-[spin_2s_linear_infinite] bg-[conic-gradient(from_90deg_at_50%_50%,#00000000_70%,#6366f1_100%)] dark:bg-[conic-gradient(from_90deg_at_50%_50%,#00000000_70%,#818cf8_100%)]" />
+             <div className="absolute inset-[2px] rounded-xl bg-slate-50 dark:bg-slate-900" />
+             <Loader2 className="relative z-10 h-7 w-7 text-indigo-600 dark:text-indigo-400 animate-[spin_1s_linear_infinite_reverse]" />
+          </div>
         </div>
-        {/* <div className="text-center text-sm font-medium text-slate-500 dark:text-slate-400">Initializing dashboard...</div> *\/}
+        <div className="text-center text-sm font-semibold tracking-wide text-indigo-600 dark:text-indigo-400 animate-pulse uppercase">
+          Initializing Dashboard...
+        </div>
       </div>
     </div>
-  ); */
+  ); 
   return (
     <Suspense fallback={fallback}>
       <DashboardContainerInner />

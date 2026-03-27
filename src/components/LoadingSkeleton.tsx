@@ -4,13 +4,23 @@ export function LoadingSkeleton() {
   const pulse = "animate-pulse rounded-lg bg-slate-200/80 dark:bg-slate-700/50";
   return (
     <div className="flex flex-col gap-8 w-full animate-in fade-in duration-500">
-      <div className="flex flex-col items-center justify-center space-y-4 py-6">
-        <div className="relative flex h-14 w-14 items-center justify-center rounded-2xl bg-indigo-50 dark:bg-indigo-900/30 ring-1 ring-indigo-100/50 dark:ring-indigo-800/50 shadow-sm">
-          <Loader2 className="h-6 w-6 text-indigo-600 dark:text-indigo-400 animate-spin" />
+      <div className="flex flex-col items-center justify-center space-y-5 py-10">
+        <div className="relative">
+          <div className="absolute inset-0 rounded-full bg-indigo-500/20 dark:bg-indigo-400/20 blur-xl animate-pulse" />
+          <div className="relative flex h-16 w-16 items-center justify-center rounded-2xl bg-white dark:bg-slate-900 ring-1 ring-slate-200/50 dark:ring-slate-800/50 shadow-xl overflow-hidden p-[2px]">
+             {/* Conic spinner border */}
+             <div className="absolute inset-[-150%] animate-[spin_2s_linear_infinite] bg-[conic-gradient(from_90deg_at_50%_50%,#00000000_70%,#6366f1_100%)] dark:bg-[conic-gradient(from_90deg_at_50%_50%,#00000000_70%,#818cf8_100%)]" />
+             <div className="absolute inset-[2px] rounded-xl bg-slate-50 dark:bg-slate-900" />
+             <Loader2 className="relative z-10 h-7 w-7 text-indigo-600 dark:text-indigo-400 animate-[spin_1s_linear_infinite_reverse]" />
+          </div>
         </div>
-        <div className="space-y-1.5 text-center">
-          <h3 className="text-lg font-semibold text-slate-800 dark:text-slate-200">Analyzing Channel Data</h3>
-          <p className="text-sm text-slate-500 dark:text-slate-400">Processing performance metrics and generating AI insights...</p>
+        <div className="space-y-2 text-center max-w-[280px]">
+          <h3 className="text-[17px] font-bold tracking-tight bg-clip-text text-transparent bg-linear-to-r from-indigo-600 to-violet-600 dark:from-indigo-400 dark:to-violet-400">
+            Analyzing Channel Data
+          </h3>
+          <p className="text-sm text-slate-500 dark:text-slate-400 leading-relaxed">
+            Crunching performance metrics and training AI insights...
+          </p>
         </div>
       </div>
 

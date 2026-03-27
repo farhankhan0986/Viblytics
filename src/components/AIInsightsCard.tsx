@@ -8,17 +8,30 @@ function AILoadingSkeleton() {
   return (
     <div className="w-full rounded-2xl overflow-hidden shadow-md shadow-indigo-100/50 dark:shadow-indigo-900/20 ring-1 ring-indigo-200/60 dark:ring-indigo-800/40">
       {/* Header */}
-      <div className="flex items-center gap-4 px-6 py-5 bg-linear-to-r from-indigo-600 to-violet-600">
-        <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-white/15 backdrop-blur-sm ring-1 ring-white/20">
-          <Loader2 className="h-5 w-5 text-white animate-spin" />
+      <div className="relative flex items-center gap-4 px-6 py-5 bg-linear-to-r from-indigo-600 to-violet-600 overflow-hidden">
+        {/* Shimmer overlay */}
+        <div className="absolute inset-0 bg-linear-to-r from-transparent via-white/10 to-transparent -translate-x-full" style={{ animation: "pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite" }} />
+        
+        <div className="relative flex h-11 w-11 items-center justify-center rounded-xl bg-white/10 backdrop-blur-md ring-1 ring-white/30 overflow-hidden p-[1.5px]">
+          <div className="absolute inset-[-150%] animate-[spin_3s_linear_infinite] bg-[conic-gradient(from_90deg_at_50%_50%,rgba(255,255,255,0)_70%,rgba(255,255,255,0.8)_100%)]" />
+          <div className="absolute inset-[1.5px] rounded-[10px] bg-indigo-600/90 backdrop-blur-sm" />
+          <Loader2 className="relative z-10 h-5 w-5 text-white animate-spin" />
         </div>
-        <div>
-          <p className="text-sm font-semibold text-white">Generating AI Analysis…</p>
-          <p className="text-xs text-indigo-200 mt-0.5">Thinking with LLaMA 3.3 · 70B</p>
+        
+        <div className="relative">
+          <p className="text-[15px] font-bold text-white flex items-center gap-1.5 leading-none">
+            Generating Analysis
+            <span className="flex items-center gap-0.5 ml-1">
+              <span className="h-1 w-1 bg-white rounded-full animate-bounce [animation-delay:-0.3s]"></span>
+              <span className="h-1 w-1 bg-white rounded-full animate-bounce [animation-delay:-0.15s]"></span>
+              <span className="h-1 w-1 bg-white rounded-full animate-bounce"></span>
+            </span>
+          </p>
+          <p className="text-[11px] text-indigo-200 mt-1.5 font-medium tracking-wide uppercase">Thinking with LLaMA 3.3 70B</p>
         </div>
-        <div className="ml-auto hidden sm:flex gap-1.5">
+        <div className="relative ml-auto hidden sm:flex gap-1.5 opacity-70">
           {[0, 200, 400].map(d => (
-            <span key={d} className="h-1.5 w-1.5 rounded-full bg-white/40 animate-pulse" style={{ animationDelay: `${d}ms` }} />
+            <span key={d} className="h-1.5 w-1.5 rounded-full bg-white animate-pulse" style={{ animationDelay: `${d}ms` }} />
           ))}
         </div>
       </div>
