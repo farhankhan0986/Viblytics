@@ -45,7 +45,8 @@ Rules:
 - patterns: focus on content patterns (title style, video length signals, topic clusters)  
 - recommendations: specific, actionable, competitor-intelligence focused
 - Be concise — each string should be 1 clear sentence
-- Do not use markdown inside strings`;
+- Do not use markdown inside strings
+- Ensure valid JSON by escaping any internal double quotes, or use single quotes.`;
 }
 
 // Fallback: full data-driven insights when Groq is unavailable
@@ -154,6 +155,7 @@ export async function POST(request: Request) {
         messages:    [{ role: 'user', content: prompt }],
         temperature: 0.5,
         max_tokens:  1024,
+        response_format: { type: 'json_object' }
       }),
     });
 

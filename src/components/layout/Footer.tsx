@@ -1,11 +1,10 @@
-import { BarChart3 } from "lucide-react";
 import { BiLogoYoutube } from 'react-icons/bi';
 import Image from "next/image";
 
 export function Footer() {
   return (
     <footer className="border-t border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900">
-      <div className="mx-auto flex max-w-7xl flex-col sm:flex-row h-14 items-center justify-between gap-2 px-4 md:px-6">
+      <div className="mx-auto flex max-w-7xl flex-col  sm:flex-row sm:h-14 items-center justify-between gap-2 px-4 md:px-6">
         <div className="flex items-center gap-1.5 text-xs text-slate-400 dark:text-slate-500">
           <div className="flex items-center gap-1.5 text-xs text-slate-400 dark:text-slate-500">
             <div className="relative flex items-center justify-center">

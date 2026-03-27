@@ -10,7 +10,7 @@ import {
 
 // ── Types ────────────────────────────────────────────────────────────────────
 type SortField = "views" | "likes" | "comments" | "publishedAt" | "engagementRate";
-type DateRange = 7 | 14 | 30 | 90 | 0; // 0 = All time
+type DateRange = 7 | 14 | 30 | 90 | 0;
 
 const DATE_RANGE_OPTIONS: { label: string; value: DateRange }[] = [
   { label: "7 days",  value: 7  },
