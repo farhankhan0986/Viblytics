@@ -174,16 +174,17 @@ function DashboardContainerInner() {
 
 // ── Wrapped in Suspense for useSearchParams ────────────────────────────────
 export function DashboardContainer() {
-  const fallback = (
+  const fallback = null;
+  /* const fallback = (
     <div className="flex w-full flex-col items-center justify-center py-24">
       <div className="flex flex-col items-center gap-4">
         <div className="relative flex h-14 w-14 items-center justify-center rounded-2xl bg-indigo-50 dark:bg-indigo-900/30 ring-1 ring-indigo-100/50 dark:ring-indigo-800/50 shadow-sm">
-          {/* <Loader2 className="h-6 w-6 text-indigo-600 dark:text-indigo-400 animate-spin" /> */}
+          {/* <Loader2 className="h-6 w-6 text-indigo-600 dark:text-indigo-400 animate-spin" /> *\/}
         </div>
-        {/* <div className="text-center text-sm font-medium text-slate-500 dark:text-slate-400">Initializing dashboard...</div> */}
+        {/* <div className="text-center text-sm font-medium text-slate-500 dark:text-slate-400">Initializing dashboard...</div> *\/}
       </div>
     </div>
-  );
+  ); */
   return (
     <Suspense fallback={fallback}>
       <DashboardContainerInner />

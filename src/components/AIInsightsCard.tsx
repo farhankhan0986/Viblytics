@@ -8,7 +8,7 @@ function AILoadingSkeleton() {
   return (
     <div className="w-full rounded-2xl overflow-hidden shadow-md shadow-indigo-100/50 dark:shadow-indigo-900/20 ring-1 ring-indigo-200/60 dark:ring-indigo-800/40">
       {/* Header */}
-      <div className="flex items-center gap-4 px-6 py-5 bg-linear-to-r from-indigo-600 to-violet-600">
+      {/* <div className="flex items-center gap-4 px-6 py-5 bg-linear-to-r from-indigo-600 to-violet-600">
         <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-white/15 backdrop-blur-sm ring-1 ring-white/20">
           <Loader2 className="h-5 w-5 text-white animate-spin" />
         </div>
@@ -21,7 +21,7 @@ function AILoadingSkeleton() {
             <span key={d} className="h-1.5 w-1.5 rounded-full bg-white/40 animate-pulse" style={{ animationDelay: `${d}ms` }} />
           ))}
         </div>
-      </div>
+      </div> */}
       {/* Shimmer body */}
       <div className="bg-white dark:bg-slate-900 px-6 py-6 space-y-3.5 animate-pulse">
         <div className="h-4 w-3/4 rounded-full bg-slate-100 dark:bg-slate-800" />
