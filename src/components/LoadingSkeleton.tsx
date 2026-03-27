@@ -4,7 +4,7 @@ export function LoadingSkeleton() {
   const pulse = "animate-pulse rounded-lg bg-slate-200/80 dark:bg-slate-700/50";
   return (
     <div className="flex flex-col gap-8 w-full animate-in fade-in duration-500">
-      <div className="flex flex-col items-center justify-center space-y-4 py-6">
+      {/* <div className="flex flex-col items-center justify-center space-y-4 py-6">
         <div className="relative flex h-14 w-14 items-center justify-center rounded-2xl bg-indigo-50 dark:bg-indigo-900/30 ring-1 ring-indigo-100/50 dark:ring-indigo-800/50 shadow-sm">
           <Loader2 className="h-6 w-6 text-indigo-600 dark:text-indigo-400 animate-spin" />
         </div>
@@ -12,7 +12,7 @@ export function LoadingSkeleton() {
           <h3 className="text-lg font-semibold text-slate-800 dark:text-slate-200">Analyzing Channel Data</h3>
           <p className="text-sm text-slate-500 dark:text-slate-400">Processing performance metrics and generating AI insights...</p>
         </div>
-      </div>
+      </div> */}
 
       {/* Channel summary card skeleton */}
       <div className="w-full rounded-3xl overflow-hidden ring-1 ring-slate-200/50 dark:ring-slate-800/80 shadow-sm bg-white/50 dark:bg-slate-900/50 backdrop-blur-sm">

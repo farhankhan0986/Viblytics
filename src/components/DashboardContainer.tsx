@@ -6,7 +6,7 @@ import { ChannelInput, saveRecentChannel } from "@/components/ChannelInput";
 import { Dashboard } from "@/components/Dashboard";
 import { LoadingSkeleton } from "@/components/LoadingSkeleton";
 import { AnalyzeResponse } from "@/types";
-import { AlertCircle, BarChart2, Search, TrendingUp, Zap } from "lucide-react";
+import { AlertCircle, BarChart2, Search, TrendingUp, Zap, Loader2 } from "lucide-react";
 import Image from "next/image";
 
 const FEATURE_PILLS = [
@@ -30,7 +30,7 @@ function DashboardContainerInner() {
   const router = useRouter();
 
   const [data, setData] = useState<AnalyzeResponse | null>(null);
-  const [isLoading, setIsLoading] = useState(false);
+  const [isLoading, setIsLoading] = useState(() => !!searchParams.get("channel"));
   const [error, setError] = useState<string | null>(null);
 
   const handleAnalyze = useCallback(async (url: string) => {
@@ -60,7 +60,7 @@ function DashboardContainerInner() {
   // Auto-analyze if ?channel= is in URL on load
   useEffect(() => {
     const ch = searchParams.get("channel");
-    if (ch && !data && !isLoading) {
+    if (ch && !data) {
       handleAnalyze(ch);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -177,8 +177,10 @@ export function DashboardContainer() {
   const fallback = (
     <div className="flex w-full flex-col items-center justify-center py-24">
       <div className="flex flex-col items-center gap-4">
-        <div className="h-8 w-8 animate-spin rounded-full border-4 border-indigo-200 border-t-indigo-600 dark:border-indigo-900 dark:border-t-indigo-400" />
-        <div className="text-center text-sm font-medium text-slate-500 dark:text-slate-400">Initializing dashboard...</div>
+        <div className="relative flex h-14 w-14 items-center justify-center rounded-2xl bg-indigo-50 dark:bg-indigo-900/30 ring-1 ring-indigo-100/50 dark:ring-indigo-800/50 shadow-sm">
+          {/* <Loader2 className="h-6 w-6 text-indigo-600 dark:text-indigo-400 animate-spin" /> */}
+        </div>
+        {/* <div className="text-center text-sm font-medium text-slate-500 dark:text-slate-400">Initializing dashboard...</div> */}
       </div>
     </div>
   );
