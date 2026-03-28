@@ -16,7 +16,7 @@ Built for marketing and analytics teams who move fast and make data-driven decis
 
 ## 📸 Demo
 
-> **Live walkthrough:**: https://www.loom.com/share/accf590f488e4179a94e4b937bed7150
+> **Live walkthrough:** https://www.loom.com/share/accf590f488e4179a94e4b937bed7150
 >
 > **Shareable channel link:** https://viblytics.vercel.app/?channel=https%3A%2F%2Fyoutube.com%2F%40MrBeast
 
