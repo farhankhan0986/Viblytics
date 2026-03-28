@@ -16,7 +16,7 @@ Built for marketing and analytics teams who move fast and make data-driven decis
 
 ## 📸 Demo
 
-> **Live walkthrough:** [🎥 Add your Loom link here](https://loom.com)
+> **Live walkthrough:**: https://www.loom.com/share/accf590f488e4179a94e4b937bed7150
 >
 > **Shareable channel link:** https://viblytics.vercel.app/?channel=https%3A%2F%2Fyoutube.com%2F%40MrBeast
 
@@ -42,6 +42,7 @@ Paste any YouTube channel URL (or click a quick-start button). In seconds you ge
 | **Channel Insights** | 4 auto-generated written observations: engagement leader, posting cadence, view momentum, trending coverage |
 | **Top 5 Chart** | Horizontal bar chart of most-viewed videos, themed to match the app |
 | **Views vs Engagement Scatter** | Toggle to scatter plot — every video as a dot, trending ones highlighted in red |
+| **AI-powered Analysis Card** | Groq/LLaMA 3.3 generates key insights, content patterns, and recommendations in three columns |
 | **Sortable Video Table** | Sort by Views, Likes, Comments, Engagement Rate, or Date |
 | **Smart Filtering** | Date range (7 / 14 / 30 / 90 days / All time) + minimum view count |
 | **🔥 Trending Badge** | Videos above the 80th percentile in views for the period |
@@ -53,6 +54,8 @@ Paste any YouTube channel URL (or click a quick-start button). In seconds you ge
 | **Dark / Light Mode** | Toggle in header, preference saved to `localStorage` |
 | **Loading Skeletons** | Pixel-matched shimmer layout while data fetches |
 | **Mock Data Fallback** | Fully functional demo mode if no API key is configured |
+| **Graceful Error & Empty States** | Clear prompts and banners; ensures the dashboard is never blank or broken |
+| **Microinteractions** | Smooth thumbnail scaling, animated trending badges, and polished sort/filter transitions |
 
 ---
 
@@ -222,6 +225,6 @@ MIT — free to use, fork, and extend.
 
 Name: Farhan Abid
 
-
 Email: farhankhan080304@gmail.com 
+
 
