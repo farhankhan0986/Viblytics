@@ -45,7 +45,7 @@ Paste any YouTube channel URL (or click a quick-start button). In seconds you ge
 | **AI-powered Analysis Card** | Groq/LLaMA 3.3 generates key insights, content patterns, and recommendations in three columns |
 | **Sortable Video Table** | Sort by Views, Likes, Comments, Engagement Rate, or Date |
 | **Smart Filtering** | Date range (7 / 14 / 30 / 90 days / All time) + minimum view count |
-| **🔥 Trending Badge** | Videos above the 80th percentile in views for the period |
+| **Trending Badge** | Videos above the 80th percentile in views for the period |
 | **Engagement Rate Column** | Color-coded: 🟢 >5% · 🟡 2–5% · 🔴 <2% — fully sortable |
 | **CSV Export** | Exports the currently sorted + filtered list with engagement rate |
 | **Shareable URLs** | `?channel=` param auto-analyzes on load — paste a link and share |
